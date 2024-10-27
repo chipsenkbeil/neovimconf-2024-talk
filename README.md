@@ -22,3 +22,29 @@ and then use it to start the presentation:
 ```sh
 presenterm -x presentation.md
 ```
+
+## Trying the examples
+
+### Weather
+
+Open the example with neovim:
+
+```sh
+nvim -u scripts/001_weather.lua
+```
+
+Run the health check:
+
+```vim
+:checkhealth weather
+```
+
+Invoke methods to print the temperature and show the weather:
+
+```vim
+:lua require("weather").check_temperature({ location = "austin" })
+```
+
+```vim
+:lua require("weather").show_weather({ location = "austin" })
+```
