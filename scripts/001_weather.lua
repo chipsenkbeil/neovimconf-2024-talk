@@ -1,0 +1,6 @@
+local current_file_path = debug.getinfo(1, "S").source:sub(2)
+local parent_dir = vim.fs.dirname(current_file_path)
+local filename_with_ext = vim.fs.basename(current_file_path)
+local _, _, filename = filename_with_ext:find("^(.*)%.lua$")
+local plugin_dir = vim.fs.joinpath(parent_dir, filename)
+vim.opt.rtp:append(plugin_dir)
