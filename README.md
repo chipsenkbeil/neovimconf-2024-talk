@@ -48,3 +48,29 @@ Invoke methods to print the temperature and show the weather:
 ```vim
 :lua require("weather").show_weather({ location = "austin" })
 ```
+
+### Webview
+
+Open the example with neovim:
+
+```sh
+nvim -u scripts/003_webview.lua
+```
+
+Run the health check:
+
+```vim
+:checkhealth webview
+```
+
+Create some markdown file:
+
+```vim
+:e /tmp/page.md
+```
+
+Invoke method to display a web view for the markdown file:
+
+```vim
+:lua require("webview").show()
+```
