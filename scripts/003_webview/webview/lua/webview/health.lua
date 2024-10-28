@@ -9,10 +9,10 @@ M.check = function()
     local webview = Webview:new()
 
     -- Check if viewer binary is available
-    if not webview.viewer:exists() then
-        vim.health.error(webview.viewer.path .. " not found")
+    if not webview.viewer:has_magick() then
+        vim.health.error("magick not found")
     else
-        vim.health.ok("viewer found on path: " .. webview.viewer.path)
+        vim.health.ok("magick found on path")
     end
 
     -- Check if firefox binary is available

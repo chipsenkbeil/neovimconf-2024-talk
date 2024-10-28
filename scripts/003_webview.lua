@@ -8,3 +8,16 @@ for name, ty in vim.fs.dir(plugin_dir) do
         vim.opt.rtp:append(vim.fs.joinpath(plugin_dir, name))
     end
 end
+
+-- Configure Neovim to load user-installed Lua rocks libraries:
+package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua"
+package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua"
+
+-- Setup image.nvim for our viewer
+require("image").setup({
+    max_width = nil,
+    max_height = nil,
+    max_width_window_percentage = nil,
+    max_height_window_percentage = nil,
+    window_overlap_clear_enabled = false,
+})

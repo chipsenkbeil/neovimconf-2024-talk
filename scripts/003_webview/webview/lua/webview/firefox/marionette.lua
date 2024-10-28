@@ -131,7 +131,7 @@ function M:send(command, data)
     local msg = { 0, msg_id, command, data }
 
     -- Encode our message, which is <size in bytes>:<msg>
-    local encoded = vim.json.encode(msg)
+    local encoded = assert(vim.json.encode(msg), "cannot encode msg")
     encoded = string.len(encoded) .. ":" .. encoded
 
     local emitter = self.__emitter

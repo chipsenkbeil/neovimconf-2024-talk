@@ -6,6 +6,7 @@ local Viewer = require("webview.viewer")
 ---@field driver webview.Driver
 ---@field firefox webview.Firefox
 ---@field viewer webview.Viewer
+---@field private __started boolean|"starting"
 local M = {}
 M.__index = M
 
@@ -17,6 +18,7 @@ function M:new()
 
     instance.firefox = Firefox:new()
     instance.viewer = Viewer:new()
+    instance.__started = false
 
     instance.driver = Driver:new({
         send = function(command, data)
@@ -28,18 +30,37 @@ function M:new()
 end
 
 ---Starts the webview instance, spawning firefox and connecting to marionette.
+---
+---If already started, this does nothing.
+---@param opts? {delay?:integer}
 ---@return webview.utils.Promise
-function M:start()
+function M:start(opts)
     local Promise = require("webview.utils.promise")
-    return self.firefox:start():next(function()
-        return Promise.delay(500):next(function()
-            return self.driver:new_session()
+
+    if self.__started == "starting" or self.__started then
+        return Promise.new(function(resolve)
+            resolve()
         end)
+    end
+
+    self.__started = "starting"
+
+    opts = opts or {}
+    return self.firefox:start():next(function()
+        return Promise.delay(opts.delay or 500):next(function()
+            return self.driver:new_session():next(function()
+                self.__started = true
+                return nil
+            end)
+        end)
+    end):catch(function()
+        self.__started = false
     end)
 end
 
 ---Stops the webview instance.
 function M:stop()
+    self.__started = false
     return self.firefox:stop()
 end
 
@@ -48,6 +69,16 @@ end
 ---@return webview.utils.Promise
 function M:navigate(url)
     return self.driver:navigate({ url = url })
+end
+
+---Displays the current browser as a screenshot in a floating window.
+---@return webview.utils.Promise<{win:integer, buf:integer}>
+function M:display_screen()
+    local Promise = require("webview.utils.promise")
+    return self:take_screenshot():next(function(results)
+        local path = results.path
+        return self.viewer:view({ path = path })
+    end)
 end
 
 ---Takes a screenshot, saving it to the specified path (or temp), returning the path to the file.
@@ -81,7 +112,7 @@ function M:take_screenshot(opts)
                     end
 
                     vim.uv.fs_close(fd, function()
-                        resolve(path)
+                        resolve({ path = path })
                     end)
                 end)
             end)
