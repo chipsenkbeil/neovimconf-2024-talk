@@ -15,11 +15,21 @@ dependencies.
 
 ## Running the presentation
 
-Install [presenterm 0.9.0](https://github.com/mfontanini/presenterm) or higher
-and then use it to start the presentation:
+1. Install [presenterm 0.9.0](https://github.com/mfontanini/presenterm).
+2. Install [mermaid-ascii 0.6.0](https://github.com/AlexanderGrooff/mermaid-ascii)
+   or higher. For MacOS, you may need to remove quarantine, which you can do via
+   `xattr -dr com.apple.quarantine mermaid-ascii`.
+
+Once the dependencies are installed, run the presentation within neovim:
 
 ```sh
-presenterm -x presentation.md
+./start.sh
+```
+
+Or, if you want to run it standalone:
+
+```sh
+presenterm -x -X presentation.md
 ```
 
 ## Examples

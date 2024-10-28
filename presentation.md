@@ -61,6 +61,7 @@ processes in neovim:
 | Method                  | Description                                       | Async?  |
 | ----------------------- | ------------------------------------------------- | ------- |
 | `:! {cmd}`              | Run {cmd} in shell connected to a pipe            | No      |
+| `:%! {cmd}`             | Same as `:!`, but inserts output into buffer      | No      |
 | `:terminal {cmd}`       | Run {cmd} in non-interactive shell connected pty  | **Yes** |
 | `:call system({cmd})`   | Run {cmd} and get output as a string              | No      |
 | `:call termopen({cmd})` | Run {cmd} in pseudo-terminal in current buffer    | **Yes** |
@@ -94,24 +95,159 @@ We're just going to focus on the first two. Rarely do you want to use
 
 <!-- jump_to_middle -->
 
-Writing a plugin
+Writing a weather plugin
 ===
 
 <!-- end_slide -->
 
-Health checks
+Weather: our first plugin
 ---
+
+In this example, weather information for a city is pulled from `https://wttr.in`
+using `curl`. The website `wttr.in` supports a variety of methods to output
+the weather, and we'll make use of `?format=j1` to return JSON.
+
+```bash +exec_replace +no_background
+mermaid-ascii -p 0 << EOF
+graph TD
+curl -->|GET https://wttr.in?format=j1| wttr.in
+wttr.in -->|HTTP 200| JSON response
+EOF
+```
+
+<!-- end_slide -->
+
+Weather: testing the command
+---
+
+Before building a function around `curl`, we should test it first. An easy way
+to do this without leaving neovim is to use `:!`.
+
+<!-- pause -->
+
+### Run program connected to a pipe
+
+Running `:!` will execute the command piped (not in a terminal), and output into
+the TODO. Supplying curl with `-s` will suppress curl's output of retrieving the
+response.
+
+We'll specifically use `?T` to force ANSI character response since we cannot
+handle color codes in the output.
+
+```vim
+:! curl -s "https://wttr.in/?T"
+```
+
+<!-- pause -->
+
+### Run program connected to a pipe and place in buffer
+
+Running `:%!` will behave just like `:!`, but place the output into the current
+buffer.
+
+```vim
+:%! curl -s "https://wttr.in/?T"
+```
+
+<!-- end_slide -->
+
+Weather: checking the tools (1/3)
+---
+
+What do we want it to do?
+
+1. Check that `curl` exists
+2. Ensure that `curl` is a version we expect
+3. Verify that `https://wttr.in` (used to get weather) is accessible
+
+<!-- pause -->
 
 Neovim provides a simplistic framework to validate conditions for a
 plugin, and we can use this to both ensure that a CLI program is
 installed and is the right version.
 
-```vim
-:checkhealth weather
-```
+<!-- pause -->
+
+### Check that curl exists
+
+Write a file in your plugin. For this example, `lua/weather/health.lua`:
 
 ```lua
-vim.notify("Hello world!")
+vim.health.start("weather health check")
+
+-- Check if curl is available, returns 1 if executable, 0 if not
+if vim.fn.executable("curl") == 0 then
+    vim.health.error("curl not found on path")
+    return
+end
+
+-- Indicate that we found curl, which is good!
+vim.health.ok("curl found on path")
+```
+
+<!-- end_slide -->
+
+Weather: checking the tools (2/3)
+---
+
+### Validate curl's version
+
+```lua
+-- Pull the version information about curl
+local results = vim.system({ "curl", "--version" }, { text = true }):wait()
+
+-- If we get a non-zero exit code, something went wrong
+if results.code ~= 0 then
+    vim.health.error("failed to retrieve curl's version", results.stderr)
+    return
+end
+
+-- Attempt to parse curl's version string, which looks like "curl 8.6.0 (...)"
+local v = vim.version.parse(vim.split(results.stdout or "", " ")[2])
+if not v then
+    vim.health.error("invalid curl version output", results.stdout)
+    return
+end
+
+-- Require curl 8.x.x
+if v.major ~= 8 then
+    vim.health.error("curl must be 8.x.x, but got " .. tostring(v))
+    return
+end
+
+-- Curl is a good version, so lastly we'll test the weather site
+vim.health.ok("curl " .. tostring(v) .. " is an acceptable version")
+```
+
+<!-- end_slide -->
+
+Weather: checking the tools (3/3)
+---
+
+### Ensure wttr.in is accessible
+
+```lua
+-- Poll the weather site using curl
+--
+-- NOTE: We must block to be able to report as scheduling a callback
+--       to invoke ok/error for health results in nothing being printed
+results = vim.system({ "curl", "wttr.in" }, { text = true }):wait()
+if results.code == 0 then
+    vim.health.ok("wttr.in is accessible")
+else
+    vim.health.error("wttr.in is not accessible")
+end
+```
+
+<!-- pause -->
+
+### Perform the health check
+
+Running `:checkhealth` with the name of the plugin will invoke our `check()`
+function containing the earlier logic.
+
+```vim
+:checkhealth weather
 ```
 
 <!-- end_slide -->
@@ -141,6 +277,15 @@ Building a UI for your plugin
 ---
 
 TODO
+
+<!-- end_slide -->
+
+Credits
+---
+
+1. *Andrei Neculaesei* for both writing `image.nvim` and directly helping me
+   diagnose issues with its use as a means to display browser screenshots
+   with scrolling functionality in the `webview` example.
 
 <!-- end_slide -->
 
