@@ -1,12 +1,10 @@
-local Webview = require("webview")
+local webview = require("webview")
 local Promise = require("webview.utils.promise")
 
 local M = {}
 
 M.check = function()
     vim.health.start("webview report")
-
-    local webview = Webview:new()
 
     -- Check if viewer binary is available
     if not webview.viewer:has_magick() then
