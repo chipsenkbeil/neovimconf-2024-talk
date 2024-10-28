@@ -29,13 +29,24 @@ local function hack_image_render(image)
     local old_max_width_window_percentage = image.global_state.options.max_width_window_percentage
     local old_max_height_window_percentage = image.global_state.options.max_height_window_percentage
 
+    -- Clear out maximum limitations so we can fill the buffer
     image.global_state.options.max_width = nil
     image.global_state.options.max_height = nil
     image.global_state.options.max_width_window_percentage = nil
     image.global_state.options.max_height_window_percentage = nil
 
+    local old_image_width = image.image_width
+    local old_image_height = image.image_height
+
+    -- Force image dimensions to be bigger to fill the buffer
+    image.image_width = old_image_width * 1000
+    image.image_height = old_image_height * 1000
+
     image:render()
 
+    -- Reset everything back to normal
+    image.image_width = old_image_width
+    image.image_height = old_image_height
     image.global_state.options.max_width = old_max_width
     image.global_state.options.max_height = old_max_height
     image.global_state.options.max_width_window_percentage = old_max_width_window_percentage
