@@ -120,4 +120,4 @@ function M:take_screenshot(opts)
     end)
 end
 
-return M
+return M:new()
