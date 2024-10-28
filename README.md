@@ -1,9 +1,8 @@
 # NeovimConf 2024 Talk
 
-Materials for my neovimconf talk.
-
 An introduction to wrapping your favorite command-line programs as neovim
-plugins. 
+plugins. Requires neovim 0.10.2, and each individual example may have additional
+dependencies.
 
 ## Topics
 
@@ -23,54 +22,17 @@ and then use it to start the presentation:
 presenterm -x presentation.md
 ```
 
-## Trying the examples
+## Examples
 
-### Weather
-
-Open the example with neovim:
-
-```sh
-nvim -u scripts/001_weather.lua
-```
-
-Run the health check:
-
-```vim
-:checkhealth weather
-```
-
-Invoke methods to print the temperature and show the weather:
-
-```vim
-:lua require("weather").check_temperature({ location = "austin" })
-```
-
-```vim
-:lua require("weather").show_weather({ location = "austin" })
-```
-
-### Webview
-
-Open the example with neovim:
-
-```sh
-nvim -u scripts/003_webview.lua
-```
-
-Run the health check:
-
-```vim
-:checkhealth webview
-```
-
-Create some markdown file:
-
-```vim
-:e /tmp/page.md
-```
-
-Invoke method to display a web view for the markdown file:
-
-```vim
-:lua require("webview").show()
-```
+1. Read more about [weather](scripts/001_weather/README.md) to see how single
+   action command line utilities can be wrapped. In this example, weather
+   information for a city is pulled from https://wttr.in using `curl`.
+2. Read more about [top](scripts/002_top/README.md) to see how interactive
+   command line utilities can be wrapped. In this example, `top` is used to
+   illustrate embedding an interactive program into neovim via terminal.
+3. Read more about [webview](scripts/003_webview/README.md) to see how streaming
+   command line utilities can be wrapped. In this example, firefox is remote
+   controlled to load websites and display screenshots of them in neovim.
+4. Read more about [sapling](scripts/004_sapling/README.md) to see how to build
+   a buffer to interact with `sapling`, a source control manager, to switch
+   between commits.
