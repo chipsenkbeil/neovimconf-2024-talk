@@ -15,11 +15,15 @@ dependencies.
 
 ## Running the presentation
 
-Install [presenterm 0.9.0](https://github.com/mfontanini/presenterm) or higher
-and then use it to start the presentation:
+1. Install [presenterm 0.9.0](https://github.com/mfontanini/presenterm).
+2. Install [mermaid-ascii 0.6.0](https://github.com/AlexanderGrooff/mermaid-ascii)
+   or higher. For MacOS, you may need to remove quarantine, which you can do via
+   `xattr -dr com.apple.quarantine mermaid-ascii`.
+
+Once the dependencies are installed, run the presentation:
 
 ```sh
-presenterm -x presentation.md
+./presentation.sh
 ```
 
 ## Examples
@@ -36,3 +40,14 @@ presenterm -x presentation.md
 4. Read more about [sapling](scripts/004_sapling/README.md) to see how to build
    a buffer to interact with `sapling`, a source control manager, to switch
    between commits.
+
+Each example can be launched with neovim by leverage `-u` with the path to the
+script:
+
+```sh
+nvim -u scripts/000_all.lua # Loads all of the examples
+nvim -u scripts/001_weather.lua # Loads the weather example
+nvim -u scripts/002_top.lua # Loads the top example
+nvim -u scripts/003_webview.lua # Loads the webview example
+nvim -u scripts/004_sapling.lua # Loads the sapling example
+```
