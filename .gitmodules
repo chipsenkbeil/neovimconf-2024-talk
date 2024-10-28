@@ -1,0 +1,3 @@
+[submodule "scripts/003_webview/image.nvim"]
+	path = scripts/003_webview/image.nvim
+	url = https://github.com/3rd/image.nvim.git
