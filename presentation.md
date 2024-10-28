@@ -12,8 +12,7 @@ theme:
 What is a command-line interface?
 ---
 
-> A means to interact with a computer program by inputting lines of text called
-_command-lines_.
+> A means to interact with a computer program by inputting lines of text called _command-lines_.
 >
 > Source: [](https://en.wikipedia.org/wiki/Command-line_interface)
 
@@ -26,24 +25,30 @@ time. Here are some examples:
 2. docker
 3. git
 4. ssh
-5. htop
+5. top
 
 <!-- end_slide -->
 
 Kinds of CLIs you might interact with
 ---
 
-<!-- incremental_lists: true -->
+<!-- pause -->
 1. Command-oriented: do one thing with each execution.
     1. `curl` transfers data using network protocols like HTTP
     2. `git` can retrieve & manipulate git repositories
-2. Stream-oriented: do many things over stdin & stdout.
-    1. `rust-analyzer` accepts requests and responds via JSON
-    2. `rg` provides a JSON mode to stream results in JSON line format
+    3. `docker` exposes commands to run and manage containers
+<!-- new_line -->
+<!-- pause -->
+2. Stream-oriented: do many things over standard or network I/O.
+    1. `rust-analyzer` accepts requests and responds via JSON over stdin/stdout
+    2. `firefox` can be remote controlled via marionette over TCP
+    3. `rg` supports outputting results to stdout as a stream of lines of JSON
+<!-- new_line -->
+<!-- pause -->
 3. Interactive: do many things with a user interface & keyboard input.
-    1. `htop` displays an ever-changing list of processes
-    2. `bash` continuously accepts commands and execute them.
-<!-- incremental_lists: false -->
+    1. `top` displays an ever-changing list of processes
+    2. `bash` continuously accepts commands and execute them
+    3. `lazygit` provides a terminal user interface (TUI) to do git operations
 
 <!-- end_slide -->
 
@@ -102,7 +107,7 @@ plugin, and we can use this to both ensure that a CLI program is
 installed and is the right version.
 
 ```vim
-:checkhealth my-curl-plugin
+:checkhealth weather
 ```
 
 ```lua
