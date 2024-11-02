@@ -1,6 +1,8 @@
 # Webview Example
 
-This plugin represents an example of a streaming process, `firefox`.
+This plugin represents an example of a streaming process, `firefox`. Note that
+this example requires using the [kitty terminal](https://sw.kovidgoyal.net/kitty/)
+to function properly. Other terminals may exhibit unexpected behavior.
 
 When firefox is started, it is provided the `--marionette` flag, which opens a
 TCP port on 2828 by default. Communication between neovim and firefox happens

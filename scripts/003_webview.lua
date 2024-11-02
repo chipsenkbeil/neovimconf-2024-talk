@@ -17,7 +17,7 @@ package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/shar
 require("image").setup({
     max_width = nil,
     max_height = nil,
-    max_width_window_percentage = nil,
-    max_height_window_percentage = nil,
+    max_width_window_percentage = false,
+    max_height_window_percentage = false,
     window_overlap_clear_enabled = false,
 })
