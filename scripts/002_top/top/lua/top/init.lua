@@ -1,8 +1,4 @@
-local M = {
-    ---Private reference to window to toggle.
-    ---@type integer|nil
-    __win = nil
-}
+local M = {}
 
 ---Open a floating window used to display top.
 ---@param opts? {win?:integer}
