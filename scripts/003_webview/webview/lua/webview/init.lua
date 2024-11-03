@@ -89,11 +89,10 @@ function M:take_screenshot(opts)
 
     ---@diagnostic disable-next-line:param-type-mismatch
     return self.driver:take_screenshot(opts):next(function(data)
-        local base64 = require("webview.utils.base64")
         local Promise = require("webview.utils.promise")
 
         return Promise.new(function(resolve, reject)
-            local decoded = base64.decode(data)
+            local decoded = vim.base64.decode(data)
             local path = opts.path or (vim.fn.tempname() .. "_screenshot.png")
 
             -- NOTE: 438 is 0o666
