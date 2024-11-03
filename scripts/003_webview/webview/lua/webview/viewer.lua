@@ -30,13 +30,12 @@ function M:view(opts)
     return Promise.new(function(resolve, reject)
         local function do_view()
             local api = require("image")
-            local term = require("image.utils.term")
 
             -- Create a scratch buffer that is wiped once hidden
             local buf = vim.api.nvim_create_buf(false, true)
-            vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
-            vim.api.nvim_buf_set_keymap(buf, "n", "<ESC>", "<CMD>close<CR>", { noremap = true, silent = true })
-            vim.api.nvim_buf_set_keymap(buf, "n", "q", "<CMD>close<CR>", { noremap = true, silent = true })
+            vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
+            vim.keymap.set("n", "<ESC>", "<CMD>close<CR>", { noremap = true, silent = true, buffer = buf })
+            vim.keymap.set("n", "q", "<CMD>close<CR>", { noremap = true, silent = true, buffer = buf })
 
             -- Create a floating window using the scratch buffer positioned in the middle
             local height = math.ceil(vim.o.lines * 0.8)  -- 80% of screen height
