@@ -23,36 +23,6 @@ function M:has_magick()
     return vim.fn.executable("magick") == 1
 end
 
-local function hack_image_render(image)
-    local old_max_width = image.global_state.options.max_width
-    local old_max_height = image.global_state.options.max_height
-    local old_max_width_window_percentage = image.global_state.options.max_width_window_percentage
-    local old_max_height_window_percentage = image.global_state.options.max_height_window_percentage
-
-    -- Clear out maximum limitations so we can fill the buffer
-    image.global_state.options.max_width = nil
-    image.global_state.options.max_height = nil
-    image.global_state.options.max_width_window_percentage = nil
-    image.global_state.options.max_height_window_percentage = nil
-
-    local old_image_width = image.image_width
-    local old_image_height = image.image_height
-
-    -- Force image dimensions to be bigger to fill the buffer
-    image.image_width = old_image_width * 1000
-    image.image_height = old_image_height * 1000
-
-    image:render()
-
-    -- Reset everything back to normal
-    image.image_width = old_image_width
-    image.image_height = old_image_height
-    image.global_state.options.max_width = old_max_width
-    image.global_state.options.max_height = old_max_height
-    image.global_state.options.max_width_window_percentage = old_max_width_window_percentage
-    image.global_state.options.max_height_window_percentage = old_max_height_window_percentage
-end
-
 ---Opens a floating buffer to view the image.
 ---@param opts {path:string}
 ---@return webview.utils.Promise<{win:integer,buf:integer}>
@@ -60,6 +30,7 @@ function M:view(opts)
     return Promise.new(function(resolve, reject)
         local function do_view()
             local api = require("image")
+            local term = require("image.utils.term")
 
             -- Create a scratch buffer that is wiped once hidden
             local buf = vim.api.nvim_create_buf(false, true)
@@ -81,10 +52,25 @@ function M:view(opts)
             })
 
             -- Load the image from disk and display it within our floating window
-            local image = api.from_file(opts.path, { window = win, buffer = buf })
+            local image = api.from_file(opts.path, {
+                window = win,
+                buffer = buf,
+                x = 0,
+                y = 0,
+                width = width,
+            })
+
+            -- TODO: This is a hack to enable scrolling for our demo. Ideally, we would use
+            --       the image.rendered_geometry.height (in pixels) converted into a total
+            --       number of rows in the terminal to translate into how many lines to fill.
+            local lines = {}
+            for _ = 1, 1000 do
+                table.insert(lines, "")
+            end
+            vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 
             -- Render the image into the buffer
-            hack_image_render(image)
+            image:render()
 
             -- Change to the window that is floating
             vim.api.nvim_set_current_win(win)
