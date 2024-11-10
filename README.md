@@ -28,9 +28,10 @@ Once the dependencies are installed, run the presentation:
 
 ## Examples
 
-1. Read more about [weather](scripts/001_weather/README.md) to see how single
-   action command line utilities can be wrapped. In this example, weather
-   information for a city is pulled from https://wttr.in using `curl`.
+1. Read more about [temperature](scripts/001_temperature/README.md) to see how
+   single action command line utilities can be wrapped. In this example,
+   temperature information for a city is pulled from https://wttr.in using
+   `curl`.
 2. Read more about [top](scripts/002_top/README.md) to see how interactive
    command line utilities can be wrapped. In this example, `top` is used to
    illustrate embedding an interactive program into neovim via terminal.
@@ -46,7 +47,7 @@ script:
 
 ```sh
 nvim -u scripts/000_all.lua # Loads all of the examples
-nvim -u scripts/001_weather.lua # Loads the weather example
+nvim -u scripts/001_temperature.lua # Loads the temperature example
 nvim -u scripts/002_top.lua # Loads the top example
 nvim -u scripts/003_webview.lua # Loads the webview example
 nvim -u scripts/004_sapling.lua # Loads the sapling example
