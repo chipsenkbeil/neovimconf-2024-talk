@@ -1,7 +1,7 @@
 local M = {}
 
 M.check = function()
-    vim.health.start("weather report")
+    vim.health.start("temperature report")
 
     -- Check if curl is available
     if vim.fn.executable("curl") == 0 then
