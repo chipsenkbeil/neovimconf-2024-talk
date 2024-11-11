@@ -386,16 +386,23 @@ So, to summarize, we'll be using:
 Credits
 ---
 
-1. *Andrei Neculaesei* for both writing `image.nvim` and directly helping me
-   diagnose issues with its use as a means to display browser screenshots
-   with scrolling functionality in the `webview` example.
+<!-- column_layout: [1, 1] -->
+
+<!-- column: 0 -->
+
+1. *Andrei Neculaesei* (3rd on Github) for both writing `image.nvim` and
+   directly helping me diagnose issues with its use as a means to display
+   browser screenshots with scrolling functionality in the `webview` example.
+
+<!-- column: 1 -->
+
+![image:width:100%](assets/images/thanks-to-3rd-3x.png)
+
+<!-- reset_layout -->
 
 <!-- end_slide -->
 
-References
+Contact Info
 ---
 
-1. [](https://neovim.io/doc/user/lua.html#vim.system() "vim.system()")
-1. [](https://neovim.io/doc/user/luvref.html#uv.spawn() "uv.spawn()")
-
-<!-- end_slide -->
+![image:width:50%](assets/images/contact-info-3x.png)
