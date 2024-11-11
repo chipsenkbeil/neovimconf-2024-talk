@@ -7,11 +7,12 @@ dependencies.
 ## Topics
 
 1. High level overview of CLIs 
-2. How to write health checks
-3. Wrap CLIs as Lua functions
-4. Wrap CLIs as vim commands
-5. Interface with CLIs that support JSON or other formats
-6. Create a tiny UI in a buffer to engage with a CLI program
+2. How to run programs and get back data in neovim
+3. Building a wrapper around `curl` to display the temperature (using JSON)
+4. Embedding `top` in a floating window using `vim.fn.termopen()`
+5. Running `firefox` headless, navigating to a website, and displaying the
+   website in neovim
+6. Creating a tiny UI in a buffer to engage with `sapling`
 
 ## Running the presentation
 
