@@ -12,7 +12,19 @@ theme:
 What are we talking about?
 ---
 
-![image:width:50%](assets/images/nvim-external-processes-3x.png)
+<!-- column_layout: [1, 1] -->
+
+<!-- column: 0 -->
+
+![image:width:100%](assets/images/nvim-external-processes-3x.png)
+
+<!-- pause -->
+
+<!-- column: 1 -->
+
+![image:width:100%](assets/images/list-of-examples-3x.png)
+
+<!-- reset_layout -->
 
 <!-- end_slide -->
 
@@ -25,15 +37,31 @@ What is a command-line interface?
 
 <!-- pause -->
 
-If you use neovim, you're no doubt familiar with these and use them all the
-time. Here are some examples:
+### Kinds of CLIs
 
-1. curl
-2. docker
-3. git
-4. rg
-5. ssh
-6. top
+<!-- pause -->
+1. Command-oriented: do one thing with each execution.
+    1. `curl` transfers data using network protocols like HTTP
+    2. `git` can retrieve & manipulate git repositories
+    3. `docker` exposes commands to run and manage containers
+<!-- new_line -->
+<!-- pause -->
+2. Stream-oriented: do many things over standard or network I/O.
+    1. `rust-analyzer` accepts requests and responds via JSON over stdin/stdout
+    2. `firefox` can be remote controlled via marionette over TCP
+    3. `rg` supports outputting results to stdout as a stream of lines of JSON
+<!-- new_line -->
+<!-- pause -->
+3. Interactive: do many things with a user interface & keyboard input.
+    1. `top` displays an ever-changing list of processes
+    2. `bash` continuously accepts commands and execute them
+    3. `lazygit` provides a terminal user interface (TUI) to do git operations
+
+<!-- end_slide -->
+
+<!-- jump_to_middle -->
+
+![image:width:50%](assets/images/did-you-know-3x.png)
 
 <!-- end_slide -->
 
@@ -66,26 +94,9 @@ buffer.
 
 <!-- end_slide -->
 
-Kinds of CLIs you might interact with
----
+<!-- jump_to_middle -->
 
-<!-- pause -->
-1. Command-oriented: do one thing with each execution.
-    1. `curl` transfers data using network protocols like HTTP
-    2. `git` can retrieve & manipulate git repositories
-    3. `docker` exposes commands to run and manage containers
-<!-- new_line -->
-<!-- pause -->
-2. Stream-oriented: do many things over standard or network I/O.
-    1. `rust-analyzer` accepts requests and responds via JSON over stdin/stdout
-    2. `firefox` can be remote controlled via marionette over TCP
-    3. `rg` supports outputting results to stdout as a stream of lines of JSON
-<!-- new_line -->
-<!-- pause -->
-3. Interactive: do many things with a user interface & keyboard input.
-    1. `top` displays an ever-changing list of processes
-    2. `bash` continuously accepts commands and execute them
-    3. `lazygit` provides a terminal user interface (TUI) to do git operations
+![image:width:50%](assets/images/how-do-we-do-it-3x.png)
 
 <!-- end_slide -->
 
@@ -130,6 +141,8 @@ We're just going to focus on the first two. Rarely do you want to use
 
 <!-- pause -->
 
+### How to use vim.system()
+
 ```lua
 -- Runs asynchronously:
 vim.system({'echo', 'hello'}, { text = true }, function(obj) 
@@ -147,26 +160,41 @@ local obj = vim.system({'echo', 'hello'}, { text = true }):wait()
 
 <!-- end_slide -->
 
-Writing a wrapper for temperature
----
+<!-- jump_to_middle -->
 
-![image:width:50%](assets/images/temperature-example-visual-3x.png)
+![image:width:50%](assets/images/example-time-3x.png)
 
 <!-- end_slide -->
 
-Temperature: our first plugin
+Writing a wrapper for temperature
 ---
+
+<!-- column_layout: [1, 1] -->
+
+<!-- column: 0 -->
 
 In this example, temperature information for a city is pulled from
 `https://wttr.in` using `curl`. The website `wttr.in` supports a variety of
 methods to output the temperature, and we'll make use of `?format=j1` to return
 JSON.
 
-<!-- jump_to_middle -->
-
 ![image:width:50%](assets/images/temperature-example-3x.png)
 
+So, to summarize, we'll be using:
+
+1. `vim.system()` to execute `curl`
+2. `vim.json.decode()` to parse curl's response
+
+<!-- pause -->
+
+<!-- column: 1 -->
+
+![image:width:100%](assets/images/temperature-example-visual-3x.png)
+
+<!-- reset_layout -->
+
 <!-- end_slide -->
+
 Temperature: checking the tools
 ---
 
@@ -239,30 +267,119 @@ end
 
 <!-- end_slide -->
 
-Temperature: implementing 
----
+<!-- jump_to_middle -->
+
+![image:width:50%](assets/images/lets-see-the-code-3x.png)
 
 <!-- end_slide -->
 
 Writing a wrapper for top
 ---
 
-![image:width:50%](assets/images/top-example-visual-3x.png)
+<!-- column_layout: [1, 1] -->
+
+<!-- column: 0 -->
+
+In this example, we leverage `vim.fn.openterm()` to spawn `top` within a
+terminal. To make things a little fancier, we'll abstract the logic into
+a neovim command that creates a floating window and embeds `top` as the
+running process within a terminal within the window.
+
+![image:width:50%](assets/images/top-example-diagram-3x.png)
+
+So, to summarize, we'll be using:
+
+1. `vim.fn.openterm()` to spawn `top` within a floating window
+
+<!-- pause -->
+
+<!-- column: 1 -->
+
+![image:width:100%](assets/images/top-example-visual-3x.png)
+
+<!-- reset_layout -->
+
+<!-- end_slide -->
+
+<!-- jump_to_middle -->
+
+![image:width:50%](assets/images/lets-see-the-code-3x.png)
 
 <!-- end_slide -->
 
 Writing a wrapper for firefox
 ---
 
-![image:width:50%](assets/images/webview-example-visual-3x.png)
+<!-- column_layout: [1, 1] -->
+
+<!-- column: 0 -->
+
+In this example, we spawn a headless instance of `firefox` - meaning no
+graphical interface running on our desktop - and have it start with
+**Marionette** enabled.
+
+Firefox ships with the **Marionette** server enabled, which we'll use to
+communicate using a **WebDriver** API over TCP to navigate to websites and
+take screenshots that we can surface within neovim as images.
+
+![image:width:50%](assets/images/webview-example-diagram-3x.png)
+
+So, to summarize, we'll be using:
+
+1. `vim.system()` to spawn **Firefox**
+2. `vim.uv.new_tcp()` and associated to connect & communicate with **Marionette**
+3. `vim.base64.decode()` to decode screenshot data from firefox to save as PNGs
+4. `image.nvim` (neovim plugin) to display these screenshots within neovim
+
+<!-- pause -->
+
+<!-- column: 1 -->
+
+![image:width:100%](assets/images/webview-example-visual-3x.png)
+
+<!-- reset_layout -->
+
+<!-- end_slide -->
+
+<!-- jump_to_middle -->
+
+![image:width:50%](assets/images/lets-see-the-code-3x.png)
 
 <!-- end_slide -->
 
 Writing a wrapper for sapling
 ---
 
-![image:width:50%](assets/images/sapling-example-visual-3x.png)
+<!-- column_layout: [1, 1] -->
 
+<!-- column: 0 -->
+
+In this example, we will abstract leveraging `sl`, the Sapling CLI, to both
+display current commits in a buffer and support switching between commits.
+
+![image:width:50%](assets/images/sapling-example-diagram-3x.png)
+
+So, to summarize, we'll be using:
+
+1. `vim.system()` to execute `sl` commands
+    1. `sl smartlog` to show a series of commits
+    2. `sl goto` to navigate to another commit
+2. `vim.keymap.set()` to specify buffer-local bindings to interface with our
+   *Sapling buffer*
+
+<!-- pause -->
+
+<!-- column: 1 -->
+
+![image:width:100%](assets/images/sapling-example-visual-3x.png)
+
+<!-- reset_layout -->
+
+<!-- end_slide -->
+
+<!-- jump_to_middle -->
+
+![image:width:50%](assets/images/lets-see-the-code-3x.png)
 
 <!-- end_slide -->
 

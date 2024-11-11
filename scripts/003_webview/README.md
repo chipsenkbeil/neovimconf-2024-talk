@@ -17,6 +17,13 @@ Install `magick` Lua bindings required for `image.nvim`:
 luarocks --local --lua-version=5.1 install magick
 ```
 
+On MacOS, you also need to install `imagemagick` itself, which can be done using
+`homebrew`:
+
+```sh
+brew install imagemagick
+```
+
 ### Run example
 
 Use the following to start a minimal setup with the example code:

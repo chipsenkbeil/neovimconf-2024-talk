@@ -7,8 +7,8 @@ function M.show(opts)
 
     -- Create an immutable scratch buffer that is wiped once hidden
     local buf = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_buf_set_option(buf, "bufhidden", "wipe")
-    vim.api.nvim_buf_set_option(buf, "modifiable", false)
+    vim.api.nvim_set_option_value("bufhidden", "wipe", { buf = buf })
+    vim.api.nvim_set_option_value("modifiable", false, { buf = buf })
 
     -- Create a floating window using the scratch buffer positioned in the middle
     local height = math.ceil(vim.o.lines * 0.8)  -- 80% of screen height
