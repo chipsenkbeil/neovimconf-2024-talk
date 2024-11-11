@@ -280,7 +280,7 @@ Writing a wrapper for top
 
 <!-- column: 0 -->
 
-In this example, we leverage `vim.fn.openterm()` to spawn `top` within a
+In this example, we leverage `vim.fn.termopen()` to spawn `top` within a
 terminal. To make things a little fancier, we'll abstract the logic into
 a neovim command that creates a floating window and embeds `top` as the
 running process within a terminal within the window.
@@ -289,7 +289,7 @@ running process within a terminal within the window.
 
 So, to summarize, we'll be using:
 
-1. `vim.fn.openterm()` to spawn `top` within a floating window
+1. `vim.fn.termopen()` to spawn `top` within a floating window
 
 <!-- pause -->
 
