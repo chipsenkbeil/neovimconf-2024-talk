@@ -42,8 +42,11 @@ end
 ---@param opts? {location?:string}
 function M.print(opts)
     opts = opts or {}
-    local location = opts.location
-    local temperature = M.fetch(opts)
+
+    ---@type string
+    local location = opts.location or vim.fn.input("Location: ")
+
+    local temperature = M.fetch({ location = location })
     local cc = temperature.current_condition[1]
     local msg = ("It's currently %s°F %s"):format(
         cc.temp_F,
@@ -51,3 +54,5 @@ function M.print(opts)
     )
     vim.api.nvim_out_write("\n" .. msg .. "\n")
 end
+
+return M
