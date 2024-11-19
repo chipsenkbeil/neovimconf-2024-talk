@@ -16,10 +16,7 @@ dependencies.
 
 ## Running the presentation
 
-1. Install [presenterm 0.9.0](https://github.com/mfontanini/presenterm).
-2. Install [mermaid-ascii 0.6.0](https://github.com/AlexanderGrooff/mermaid-ascii)
-   or higher. For MacOS, you may need to remove quarantine, which you can do via
-   `xattr -dr com.apple.quarantine mermaid-ascii`.
+Install [presenterm 0.9.0](https://github.com/mfontanini/presenterm).
 
 Once the dependencies are installed, run the presentation:
 
