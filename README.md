@@ -14,6 +14,10 @@ dependencies.
    website in neovim
 6. Creating a tiny UI in a buffer to engage with `sapling`
 
+## Video Presentation
+
+[![Presentation](https://img.youtube.com/vi/rerTvidyz-0/0.jpg)](https://www.youtube.com/watch?v=rerTvidyz-0)
+
 ## Running the presentation
 
 Install [presenterm 0.9.0](https://github.com/mfontanini/presenterm).
